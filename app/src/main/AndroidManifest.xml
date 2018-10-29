@@ -10,18 +10,19 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.CronjobItemActivity"/>
         <service android:name=".services.CronjobsService"/>
         <provider android:name=".providers.CronjobsContentProvider"
             android:authorities=".providers.CronjobsContentProvider"
             android:exported="false"
         />
-        <receiver android:name=".fragments.CronjobsListFragment$CronjobsListBroadcaseReceiver"/>
+        <receiver android:name=".fragments.CronjobsListFragment$CronjobsListBroadcastReceiver"/>
     </application>
 
 </manifest>

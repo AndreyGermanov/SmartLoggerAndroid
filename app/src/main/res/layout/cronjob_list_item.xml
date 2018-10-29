@@ -2,31 +2,35 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/list_cronjob_id"
-            android:paddingLeft="4dp"/>
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_cronjob_lastRunTimestamp"
+        android:paddingLeft="4dp"
+    />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_cronjob_id"
+        android:paddingLeft="4dp"
+    />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_cronjob_name"
-        android:paddingLeft="4dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_cronjob_type"
-        android:paddingLeft="4dp"/>
+        android:paddingLeft="4dp"
+    />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_cronjob_status"
-        android:paddingLeft="4dp"/>
+        android:paddingLeft="4dp"
+    />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_cronjob_enabled"
-        android:paddingLeft="4dp"/>
+        android:paddingLeft="4dp"
+    />
 </LinearLayout>

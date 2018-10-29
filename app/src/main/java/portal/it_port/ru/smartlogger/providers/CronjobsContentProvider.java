@@ -1,3 +1,7 @@
+/**
+ * Created by Andrey Germanov on 10/28/18.
+ */
+
 package portal.it_port.ru.smartlogger.providers;
 
 import android.content.ContentProvider;
@@ -7,32 +11,49 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-
 import portal.it_port.ru.smartlogger.utils.DataMap;
 
 /**
- * Created by Andrey Germanov on 10/28/18.
+ * Content provider which manages list of Cronjobs. Used by activities to display
+ * data of this list in UI
  */
 public class CronjobsContentProvider extends ContentProvider {
 
     private final String TAG = this.getClass().getName();
-    public static final String Uri = "content://.providers.CronjobsContentProvider/cronjobs";
-    ConcurrentHashMap<String,TreeMap<String,Object>> cronjobs = new ConcurrentHashMap<>();
 
+    // URI which content resolvers uses to access this provider and run tasks related to
+    // Cronjobs list
+    public static final Uri CRONJOBS_LIST_URI = Uri.parse("content://.providers.CronjobsContentProvider/cronjobs");
+
+    // Structure which contains current cronjobs list
+    private ConcurrentHashMap<String,TreeMap<String,Object>> cronjobs = new ConcurrentHashMap<>();
+
+
+    /**
+     * Method automatically starts when this object instantiates first time
+     * @return
+     */
     @Override
     public boolean onCreate() {
-        return true;
+        return false;
     }
 
-
+    /**
+     * Method which responds to SELECT queries to this Content provider.
+     * @param uri - Request URI
+     * @param fields - List of fields to retrieve
+     * @param condition -Select condition (everything after WHERE in SQL query)
+     * @param selectArgs -Array of arguments, which will be passed to condition, if condition string
+     *                   uses placeholders "?"
+     * @param sortOrder -ORDER BY expression in SQL format, as "id ASC, name DESC"
+     * @return Cursor with data
+     */
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        MatrixCursor result = new MatrixCursor(new String[]{"enabled","id","name","status","type"});
+    public Cursor query(@NonNull Uri uri, @Nullable String[] fields, @Nullable String condition, @Nullable String[] selectArgs, @Nullable String sortOrder) {
+        MatrixCursor result = new MatrixCursor(new String[]{"enabled","id","lastRunTimestamp","name","status","type"});
         for (String key: cronjobs.keySet()) {
             TreeMap<String,Object> row = cronjobs.get(key);
             if (row == null) continue;
@@ -41,6 +62,11 @@ public class CronjobsContentProvider extends ContentProvider {
         return result;
     }
 
+    /**
+     * Method used to construct single of query result
+     * @param row Input row
+     * @return Output array, in format that Cursor object accepts
+     */
     private Object[] getRow(TreeMap<String,Object> row) {
         Object[] result = new Object[row.size()];
         int i = 0;
@@ -53,12 +79,24 @@ public class CronjobsContentProvider extends ContentProvider {
         return result;
     }
 
+    /**
+     * Method returns type of request to this Content Provider, based on provided request Uri
+     * @param uri source URI
+     * @return String representation of type of request
+     */
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
         return null;
     }
 
+    /**
+     * Method used to implement INSERT operation to add rows to data collection
+     * @param uri Request URI
+     * @param contentValues : Map with data, where keys are field names and values are field values
+     * @return URI of added item, which will be possible to use for future request to this row or
+     * null if it not required
+     */
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
@@ -69,17 +107,37 @@ public class CronjobsContentProvider extends ContentProvider {
         row.put("type",contentValues.getAsString("type"));
         row.put("status",contentValues.getAsString("status"));
         row.put("enabled",contentValues.getAsBoolean("enabled"));
+        Long lastRunTimestamp = 0L;
+        if (contentValues.getAsLong("lastRunTimestamp") != null)
+            lastRunTimestamp = contentValues.getAsLong("lastRunTimestamp");
+        row.put("lastRunTimestamp",lastRunTimestamp);
         cronjobs.put(contentValues.getAsString("id"),row);
         return null;
     }
 
+
+    /**
+     * Method used to implement DELETE operation to delete rows from data collection
+     * @param uri Request Uri
+     * @param condition - Condition in SQL format (everything after WHERE)
+     * @param conditionArgs - List of condition arguments, if condition has "?" placeholders
+     * @return number of affected rows
+     */
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+    public int delete(@NonNull Uri uri, @Nullable String condition, @Nullable String[] conditionArgs) {
         return 0;
     }
 
+    /**
+     * Method used to implement UPDATE operation to udate rows in data collection
+     * @param uri Request URI
+     * @param contentValues : Map with data to set for matched records, where keys are field names and values are field values
+     * @param condition - Condition in SQL format (everything after WHERE)
+     * @param conditionArgs - List of condition arguments, if condition has "?" placeholders
+     * @return number of affected rows
+     */
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String condition, @Nullable String[] conditionArgs) {
         return 0;
     }
 }

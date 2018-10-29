@@ -52,6 +52,4 @@ public class ConfigManager {
     public void setPollPeriod(int pollPeriod) {
         this.pollPeriod = pollPeriod;
     }
-
-
 }
