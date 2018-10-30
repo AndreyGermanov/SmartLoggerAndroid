@@ -17,7 +17,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 import portal.it_port.ru.smartlogger.R;
-import portal.it_port.ru.smartlogger.main.StateStore;
 import portal.it_port.ru.smartlogger.models.Cronjob;
 import portal.it_port.ru.smartlogger.models.CronjobCollection;
 import portal.it_port.ru.smartlogger.services.CronjobsService;
@@ -32,7 +31,7 @@ public class CronjobItemFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        cronjob = CronjobCollection.getInstance().getCronjob(StateStore.getInstance().getCurrentCronjobId());
+        cronjob = CronjobCollection.getInstance().getCronjob(getArguments().getString("cronjobId"));
         IntentFilter filter = new IntentFilter(CronjobsService.CRONJOBS_LIST_CHANGED);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(new CronjobItemBroadcastReceiver(),filter);
     }
@@ -46,11 +45,13 @@ public class CronjobItemFragment extends Fragment implements View.OnClickListene
     }
 
     private void updateUI(View view) {
+        if (view == null) return;
         renderInfoTable(view);
         renderButton(view);
     }
 
     private void renderInfoTable(View view) {
+        if (view == null) return;
         TextView cronjobName = view.findViewById(R.id.item_cronjob_name);
         TextView cronjobStatus = view.findViewById(R.id.item_cronjob_status);
         TextView cronjobLastRunTime = view.findViewById(R.id.item_cronjob_lastRunTime);
@@ -61,6 +62,7 @@ public class CronjobItemFragment extends Fragment implements View.OnClickListene
     }
 
     private void renderButton(View view) {
+        if (view == null) return;
         Button enabledButton = view.findViewById(R.id.item_cronjob_enabledDisabled);
         String buttonText = getResources().getString(R.string.enable);
         if (cronjob.isEnabled()) buttonText = getResources().getString(R.string.disable);

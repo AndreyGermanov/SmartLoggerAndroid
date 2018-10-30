@@ -142,7 +142,7 @@ public final class CronjobCollection extends Collection {
     public List<Cronjob> getCronjobsList(String type) {
         List<Cronjob> result = new ArrayList<>();
         for (String key: cronjobs.keySet()) {
-            if (type != null && !cronjobs.get(key).getType().equals(type)) continue;
+            if (type != null && !type.isEmpty() && !cronjobs.get(key).getType().equals(type)) continue;
             result.add(cronjobs.get(key));
         }
         Collections.sort(result);

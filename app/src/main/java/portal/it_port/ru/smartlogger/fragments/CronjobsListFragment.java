@@ -44,8 +44,7 @@ public class CronjobsListFragment extends ListFragment {
     public void onCreate(Bundle state) {
         super.onCreate(state);
         Bundle arguments = getArguments();
-        if (arguments!=null && arguments.containsKey("type"))
-            cronjobType = getArguments().getString("type");
+            cronjobType = StateStore.getInstance(getActivity().getApplicationContext()).getCronjobsListFilter();
         list = CronjobCollection.getInstance().getCronjobsList(cronjobType);
     }
 
@@ -72,7 +71,7 @@ public class CronjobsListFragment extends ListFragment {
     public void onListItemClick(ListView listView, View parent, int position, long id) {
         super.onListItemClick(listView, parent, position, id);
         Cronjob cronjob = (Cronjob)getListAdapter().getItem(position);
-        StateStore.getInstance().setCurrentCronjobId(cronjob.getId());
+        StateStore.getInstance(getActivity().getApplicationContext()).setCurrentCronjobId(cronjob.getId());
         Intent i = new Intent(getActivity(), CronjobItemActivity.class);
         startActivity(i);
     }

@@ -42,7 +42,7 @@ class GetCronjobsTask extends TimerTask {
 
     @Override
     /**
-     * Matin method, which service uses to start this task
+     * Main method, which service uses to start this task
      */
     public void run() {
         try {
@@ -70,20 +70,16 @@ class GetCronjobsTask extends TimerTask {
      * currently running tasks
      */
     private TreeMap<String,LinkedTreeMap<String,Object>> getCurrentCronjobs() {
-        URLConnection connection;
-        TreeMap<String,LinkedTreeMap<String,Object>> result = new TreeMap<>();
         try {
             URL url = new URL(config.getScheme() + "://" + config.getHost() + ":" + config.getPort() + "/cronjobs");
-            connection = url.openConnection();
-            if (config.getScheme().equals("https"))
-                connection = url.openConnection();
+            URLConnection connection = url.openConnection();
             connection.connect();
             Gson gson = new Gson();
             String json = new BufferedReader(new InputStreamReader((InputStream) connection.getContent())).readLine();
-            if (json == null || json.isEmpty()) return result;
+            if (json == null || json.isEmpty()) return new TreeMap<>();
             return parseCronjobs(gson.fromJson(json,TreeMap.class));
         } catch (Exception e) {
-            return result;
+            return new TreeMap<>();
         }
     }
 
