@@ -33,6 +33,7 @@ public class CronjobsListFragment extends ListFragment {
 
     // Filter used for list. Only cronjobs with this type displayed in the list
     private String cronjobType;
+    private StateStore stateStore;
     // List of cronjobs displayed
     List<Cronjob> list;
 
@@ -43,9 +44,17 @@ public class CronjobsListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        Bundle arguments = getArguments();
-            cronjobType = StateStore.getInstance(getActivity().getApplicationContext()).getCronjobsListFilter();
+        stateStore = StateStore.getInstance(getContext());
+        cronjobType = StateStore.getInstance(getActivity().getApplicationContext()).getCronjobsListFilter();
         list = CronjobCollection.getInstance().getCronjobsList(cronjobType);
+        if (stateStore.getCurrentScreen() == StateStore.Screens.CRONJOBS_ITEM)
+            startActivity(new Intent(getContext(),CronjobItemActivity.class));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        stateStore.setCurrentScreen(StateStore.Screens.CRONJOBS_LIST);
     }
 
     /**

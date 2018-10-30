@@ -1,7 +1,6 @@
 package portal.it_port.ru.smartlogger.main;
 
 import android.app.Application;
-import android.os.Bundle;
 
 /**
  * Created by Andrey Germanov on 10/30/18.

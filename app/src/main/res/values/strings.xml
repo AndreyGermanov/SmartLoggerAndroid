@@ -4,4 +4,11 @@
     <string name="disabled">Disabled</string>
     <string name="disable">Disable</string>
     <string name="enable">Enable</string>
+    <string name="host">Host</string>
+    <string name="protocol">Protocol</string>
+    <string name="port">Port</string>
+    <string name="pollPeriod">Poll interval</string>
+    <string name="save">Save</string>
+    <string name="http">http</string>
+    <string name="https">https</string>
 </resources>

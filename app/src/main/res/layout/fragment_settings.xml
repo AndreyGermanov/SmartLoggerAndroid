@@ -1,10 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_height="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical">
+    <ScrollView
         android:layout_width="match_parent"
-        android:text="Settings"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+    >
+        <LinearLayout android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/protocol"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/settings_protocol_http"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/http"
+                />
+                <Button
+                    android:id="@+id/settings_protocol_https"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/https"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/host"
+            />
+            <EditText
+                android:id="@+id/settings_host"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:lines="1"
+                android:inputType="text"
+            />
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/port"
+            />
+            <EditText
+                android:id="@+id/settings_port"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:lines="1"
+                android:inputType="number"
+            />
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/pollPeriod"
+            />
+            <EditText
+                android:id="@+id/settings_pollperiod"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:lines="1"
+                android:inputType="number"
+            />
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/settings_save"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/save"
     />
 </LinearLayout>

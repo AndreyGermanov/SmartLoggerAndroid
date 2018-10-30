@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import portal.it_port.ru.smartlogger.R;
+import portal.it_port.ru.smartlogger.main.StateStore;
 
 /**
  * Created by Andrey Germanov on 10/30/18.
  */
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends BaseFragment {
 
     @Nullable
     @Override
@@ -21,6 +22,12 @@ public class DashboardFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_dashboard,container,false);
         SetupUI(v);
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        stateStore.setCurrentScreen(StateStore.Screens.DASHBOARD);
     }
 
     private void SetupUI(View v) {};
