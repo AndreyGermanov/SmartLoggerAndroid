@@ -45,7 +45,8 @@ public class CronjobsListFragment extends ListFragment {
     public void onCreate(Bundle state) {
         super.onCreate(state);
         stateStore = StateStore.getInstance(getContext());
-        cronjobType = StateStore.getInstance(getActivity().getApplicationContext()).getCronjobsListFilter();
+        cronjobType = StateStore.getInstance(getActivity().getApplicationContext())
+                .getCronjobsListFilter();
         list = CronjobCollection.getInstance().getCronjobsList(cronjobType);
         if (stateStore.getCurrentScreen() == StateStore.Screens.CRONJOBS_ITEM)
             startActivity(new Intent(getContext(),CronjobItemActivity.class));
@@ -80,7 +81,8 @@ public class CronjobsListFragment extends ListFragment {
     public void onListItemClick(ListView listView, View parent, int position, long id) {
         super.onListItemClick(listView, parent, position, id);
         Cronjob cronjob = (Cronjob)getListAdapter().getItem(position);
-        StateStore.getInstance(getActivity().getApplicationContext()).setCurrentCronjobId(cronjob.getId());
+        StateStore.getInstance(getActivity().getApplicationContext())
+                .setCurrentCronjobId(cronjob.getId());
         Intent i = new Intent(getActivity(), CronjobItemActivity.class);
         startActivity(i);
     }
@@ -96,7 +98,8 @@ public class CronjobsListFragment extends ListFragment {
         }
 
         private void updateCronjobs(Context context) {
-            Cursor cursor = context.getContentResolver().query(CronjobsContentProvider.CRONJOBS_LIST_URI,null,null,null,null);
+            Cursor cursor = context.getContentResolver().query(
+                    CronjobsContentProvider.CRONJOBS_LIST_URI,null,null,null,null);
             if (cursor == null) return;
             while (cursor.moveToNext()) CronjobCollection.getInstance().putCronjob(cursor);
             cursor.close();
@@ -114,19 +117,19 @@ public class CronjobsListFragment extends ListFragment {
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             if (convertView == null)
                 convertView = getLayoutInflater().inflate(R.layout.cronjob_list_item,parent,false);
-            TextView cronjobId = convertView.findViewById(R.id.list_cronjob_id);
-            TextView cronjobName = convertView.findViewById(R.id.list_cronjob_name);
-            TextView cronjobStatus = convertView.findViewById(R.id.list_cronjob_status);
-            TextView cronjobEnabled = convertView.findViewById(R.id.list_cronjob_enabled);
-            TextView cronjobLastRunTimestamp = convertView.findViewById(R.id.list_cronjob_lastRunTimestamp);
             Cronjob item = (Cronjob)getListAdapter().getItem(position);
-            cronjobId.setText(item.getId());
-            cronjobName.setText(item.getName());
-            cronjobStatus.setText(item.getStatus());
-            cronjobEnabled.setText(Boolean.toString(item.isEnabled()));
-            if (item.getLastRunTimestamp()>0)
-                cronjobLastRunTimestamp.setText(Long.toString(item.getLastRunTimestamp()));
+            setupTextView(convertView,R.id.list_cronjob_id,item.getId());
+            setupTextView(convertView,R.id.list_cronjob_name,item.getName());
+            setupTextView(convertView,R.id.list_cronjob_status,item.getStatus());
+            setupTextView(convertView,R.id.list_cronjob_enabled,Boolean.toString(item.isEnabled()));
+            setupTextView(convertView,R.id.list_cronjob_lastRunTimestamp,Long.toString(item.getLastRunTimestamp()));
             return convertView;
+        }
+
+        private TextView setupTextView(View v,int resourceId,String value) {
+            TextView result = v.findViewById(resourceId);
+            result.setText(value);
+            return result;
         }
     }
 }

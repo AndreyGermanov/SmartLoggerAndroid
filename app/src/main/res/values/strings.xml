@@ -11,4 +11,12 @@
     <string name="save">Save</string>
     <string name="http">http</string>
     <string name="https">https</string>
+    <string name="requiredFieldError">This field is required</string>
+    <string name="incorrectFieldValueError">Incorrect field value</string>
+    <string name="configSavedSuccessfully">Configuration saved successfully</string>
+    <string name="configSaveFailure">Failed to save config</string>
+    <string-array name="host_protocols">
+        <item>http</item>
+        <item>https</item>
+    </string-array>
 </resources>

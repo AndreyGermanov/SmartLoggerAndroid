@@ -1,16 +1,17 @@
 package portal.it_port.ru.smartlogger.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Toast;
+import java.util.HashMap;
 import portal.it_port.ru.smartlogger.R;
+import portal.it_port.ru.smartlogger.config.ConfigManager;
 import portal.it_port.ru.smartlogger.main.StateStore;
-import portal.it_port.ru.smartlogger.ui.TextChangeListener;
+import portal.it_port.ru.smartlogger.ui.InputField;
+import portal.it_port.ru.smartlogger.ui.InputValueChangeListener;
 
 /**
  * Created by Andrey Germanov on 10/30/18.
@@ -18,8 +19,7 @@ import portal.it_port.ru.smartlogger.ui.TextChangeListener;
 public class SettingsFragment extends BaseFragment implements View.OnClickListener  {
 
     private StateStore stateStore;
-    private EditText hostField,portField,pollPeriodField;
-    private Button httpProtocolButton,httpsProtocolButton,saveButton;
+    private HashMap<String,InputField> fields = new HashMap<>();
 
     @Override
     public void onCreate(Bundle state) {
@@ -27,10 +27,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         stateStore = StateStore.getInstance(getContext());
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_settings,container,false);
+    public View onCreateView(LayoutInflater inflater,ViewGroup parent,Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_settings,parent,false);
         setupUI(v);
         return v;
     }
@@ -38,69 +37,88 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        stateStore.setCurrentScreen(StateStore.Screens.DASHBOARD);
+        stateStore.setCurrentScreen(StateStore.Screens.SETTINGS);
     }
 
     private void setupUI(View v) {
-        setupButtons(v);
         setupInputFields(v);
-        applyState();
+        setupButtons(v);
     }
 
     private void setupInputFields(View v) {
-        hostField = setupInputField(v,R.id.settings_host,stateStore.getSettingsHost());
-        portField = setupInputField(v,R.id.settings_port,stateStore.getSettingsPort());
-        pollPeriodField = setupInputField(v,R.id.settings_pollperiod,stateStore.getSettingsPollPeriod());
+        fields.put("protocol",setupInputField(v,"select",R.id.settings_protocol,stateStore
+                .getSettingsProtocol()));
+        fields.put("host",setupInputField(v,"text",R.id.settings_host,stateStore.getSettingsHost()));
+        fields.put("port",setupInputField(v,"text",R.id.settings_port,stateStore.getSettingsPort()));
+        fields.put("pollPeriod",setupInputField(v,"text",R.id.settings_pollperiod,stateStore
+                .getSettingsPollPeriod()));
     }
 
-    private EditText setupInputField(View rootView,int resourceId,String defaultValue) {
-        EditText result = rootView.findViewById(resourceId);
-        result.setText(defaultValue);
-        result.addTextChangedListener(new TextChangeListener(result,this));
+    private InputField setupInputField(View rootView,String fieldType,int resourceId,String defaultValue) {
+        InputField result = InputField.inflate(rootView,fieldType,resourceId);
+        result.setValue(defaultValue);
+        result.setChangeListener(new InputValueChangeListener(result,this));
         return result;
     }
 
     private void setupButtons(View v) {
-        httpProtocolButton = setupButton(v,R.id.settings_protocol_http);
-        httpsProtocolButton = setupButton(v,R.id.settings_protocol_https);
-        saveButton = setupButton(v,R.id.settings_save);
+        Button saveButton = v.findViewById(R.id.settings_save);
+        saveButton.setBackgroundColor(getResources().getColor(R.color.buttonBackground));
+        saveButton.setTextColor(getResources().getColor(R.color.buttonText));
+        saveButton.setOnClickListener(this);
     }
 
-    private Button setupButton(View rootView, int resourceId) {
-        Button result = rootView.findViewById(resourceId);
-        result.setBackgroundColor(getResources().getColor(R.color.buttonBackground));
-        result.setTextColor(getResources().getColor(R.color.buttonText));
-        result.setOnClickListener(this);
-        return result;
-    }
-
-    private void applyState() {
-        System.out.println("APPLYING STATE");
-        System.out.println(stateStore.getSettingsProtocol());
-        if (stateStore.getSettingsProtocol().equals("http")) {
-            httpProtocolButton.setBackgroundColor(getResources().getColor(R.color.selectedButtonBackground));
-            httpProtocolButton.setTextColor(getResources().getColor(R.color.selectedButtonText));
-        } else if (stateStore.getSettingsProtocol().equals("https")) {
-            httpsProtocolButton.setBackgroundColor(getResources().getColor(R.color.selectedButtonBackground));
-            httpsProtocolButton.setTextColor(getResources().getColor(R.color.selectedButtonText));
-        }
-    }
-
-    public void onEditTextChanged(EditText editText, String value) {
+    public void onEditTextChanged(View editText, Object value) {
+        if (value == null) return;
         switch (editText.getId()) {
-            case R.id.settings_host: stateStore.setSettingsHost(value);break;
-            case R.id.settings_port: stateStore.setSettingsPort(value);break;
-            case R.id.settings_pollperiod: stateStore.setSettingsPollPeriod(value);break;
+            case R.id.settings_host: stateStore.setSettingsHost(value.toString());break;
+            case R.id.settings_port: stateStore.setSettingsPort(value.toString());break;
+            case R.id.settings_pollperiod: stateStore.setSettingsPollPeriod(value.toString());break;
+            case R.id.settings_protocol: stateStore.setSettingsProtocol(value.toString());
         }
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.settings_protocol_http: stateStore.setSettingsProtocol("http");break;
-            case R.id.settings_protocol_https: stateStore.setSettingsProtocol("https");break;
+        if (view.getId() == R.id.settings_save) saveConfig();
+    }
+
+    private void saveConfig() {
+        clearErrorMessages();
+        ConfigManager configManger = ConfigManager.getInstance();
+        configManger.setContext(getContext());
+        HashMap<String,String> errors = configManger.validateConfig();
+        if (errors.size()>0) {
+            showErrorMessages(errors);
+            return;
         }
-        setupButtons(getView());
-        applyState();
+        configManger.setConfig();
+        if (configManger.saveConfig())
+            showSuccessToast();
+        else
+            showFailureToast();
+    }
+
+    private void clearErrorMessages() {
+        for (String key: fields.keySet()) { fields.get(key).setError(""); }
+    }
+
+    private void showErrorMessages(HashMap<String,String> errors) {
+        for (String fieldName: errors.keySet()) {
+            InputField field = fields.get(fieldName);
+            if (field != null) field.setError(errors.get(fieldName));
+        }
+    }
+
+    private void showSuccessToast() {
+        showToast(getResources().getString(R.string.configSavedSuccessfully));
+    }
+
+    private void showFailureToast() {
+        showToast(getResources().getString(R.string.configSaveFailure));
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
     }
 }

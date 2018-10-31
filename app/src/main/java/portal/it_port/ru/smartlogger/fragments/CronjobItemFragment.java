@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +29,11 @@ public class CronjobItemFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        cronjob = CronjobCollection.getInstance().getCronjob(getArguments().getString("cronjobId"));
+        cronjob = CronjobCollection.getInstance()
+                .getCronjob(getArguments().getString("cronjobId"));
         IntentFilter filter = new IntentFilter(CronjobsService.CRONJOBS_LIST_CHANGED);
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(new CronjobItemBroadcastReceiver(),filter);
+        LocalBroadcastManager.getInstance(getContext())
+                .registerReceiver(new CronjobItemBroadcastReceiver(),filter);
     }
 
     @Override
@@ -42,10 +42,9 @@ public class CronjobItemFragment extends BaseFragment implements View.OnClickLis
         stateStore.setCurrentScreen(StateStore.Screens.CRONJOBS_ITEM);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cronjob_item,container,false);
+    public View onCreateView(LayoutInflater inflater,ViewGroup parent,Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_cronjob_item,parent,false);
         updateUI(view);
         return view;
     }

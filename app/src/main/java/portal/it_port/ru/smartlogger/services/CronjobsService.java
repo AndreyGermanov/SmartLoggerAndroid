@@ -65,6 +65,7 @@ public class CronjobsService extends IntentService {
      */
     private void startCronjobsSyncTask() {
         ConfigManager config = ConfigManager.getInstance();
+        config.setContext(getApplicationContext());
         if (getCronjobsTimer == null) {
             getCronjobsTimer = new Timer();
             getCronjobsTimer.schedule(new GetCronjobsTask(getApplicationContext()),0,config.getPollPeriod());

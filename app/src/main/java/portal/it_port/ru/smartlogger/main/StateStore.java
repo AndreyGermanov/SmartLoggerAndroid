@@ -16,7 +16,6 @@ import portal.it_port.ru.smartlogger.utils.DataMap;
  */
 public class StateStore {
 
-    private final String TAG = "StateStore";
     private Context context;
     private String currentCronjobId;
     private String cronjobsListFilter = "";
@@ -28,6 +27,7 @@ public class StateStore {
     private String settingsPollPeriod = "";
     private String settingsProtocol = "";
 
+    private final String TAG = "StateStore";
     private static StateStore instance;
 
     public static StateStore getInstance(Context context) {
@@ -61,12 +61,12 @@ public class StateStore {
     }
 
     private void loadState() {
-        ConfigManager configManager = ConfigManager.getInstance();
+        ConfigManager configManager = ConfigManager.getInstance(context);
+        configManager.setContext(context);
         try {
             HashMap<String,Object> state = (HashMap<String,Object>)gson.fromJson(
                 new BufferedReader(new InputStreamReader(context.openFileInput("state.json"))).readLine(),HashMap.class
             );
-            Log.i(TAG,state.toString());
             currentTab = Double.valueOf(DataMap.getOrDefault(state,"currentTab",currentTab).toString()).intValue();
             currentCronjobId = DataMap.getOrDefault(state,"currentCronjobId",currentCronjobId).toString();
             cronjobsListFilter = DataMap.getOrDefault(state,"cronjobsListFilter",cronjobsListFilter).toString();

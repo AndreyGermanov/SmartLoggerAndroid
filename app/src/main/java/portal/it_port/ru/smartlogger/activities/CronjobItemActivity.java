@@ -81,13 +81,11 @@ public class CronjobItemActivity extends FragmentActivity {
             Bundle args = new Bundle();
             args.putString("cronjobId",cronjob.getId());
             fragment.setArguments(args);
-            System.out.println(fragment);
             return fragment;
         }
 
         @Override
         public int getCount() {
-            System.out.println(cronjobs.size());
             return cronjobs.size();
         }
     }

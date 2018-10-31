@@ -1,73 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent" android:orientation="vertical">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
     >
         <LinearLayout android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="@string/protocol"
-                />
-            <LinearLayout
+            <portal.it_port.ru.smartlogger.ui.SelectInputField
+                android:id="@+id/settings_protocol"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <Button
-                    android:id="@+id/settings_protocol_http"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/http"
-                />
-                <Button
-                    android:id="@+id/settings_protocol_https"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/https"
-                    />
-            </LinearLayout>
-            <TextView
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="@string/host"
+                custom:label="@string/protocol"
+                custom:list="@array/host_protocols"
             />
-            <EditText
+            <portal.it_port.ru.smartlogger.ui.TextInputField
                 android:id="@+id/settings_host"
-                android:layout_height="wrap_content"
+                custom:label="@string/host"
+                custom:inputType="text"
                 android:layout_width="match_parent"
-                android:lines="1"
-                android:inputType="text"
-            />
-            <TextView
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="@string/port"
             />
-            <EditText
+            <portal.it_port.ru.smartlogger.ui.TextInputField
                 android:id="@+id/settings_port"
-                android:layout_height="wrap_content"
+                custom:label="@string/port"
+                custom:inputType="number"
                 android:layout_width="match_parent"
-                android:lines="1"
-                android:inputType="number"
-            />
-            <TextView
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="@string/pollPeriod"
             />
-            <EditText
+            <portal.it_port.ru.smartlogger.ui.TextInputField
                 android:id="@+id/settings_pollperiod"
-                android:layout_height="wrap_content"
+                custom:label="Poll period"
+                custom:inputType="number"
                 android:layout_width="match_parent"
-                android:lines="1"
-                android:inputType="number"
+                android:layout_height="wrap_content"
             />
         </LinearLayout>
     </ScrollView>

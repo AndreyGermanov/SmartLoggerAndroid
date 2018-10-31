@@ -6,23 +6,26 @@
 >
     <ImageButton
         android:id="@+id/tab_dashboard"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_dialog_map"
         android:layout_gravity="center"
+        android:layout_weight="1"
     />
     <ImageButton
         android:id="@+id/tab_cronjobs"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_edit"
         android:layout_gravity="center"
+        android:layout_weight="1"
     />
     <ImageButton
         android:id="@+id/tab_settings"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_preferences"
         android:layout_gravity="center"
+        android:layout_weight="1"
     />
 </LinearLayout>
