@@ -1,6 +1,7 @@
 package portal.it_port.ru.smartlogger.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup parent,Bundle savedInstanceState) {
+    public View onCreateView(@Nullable LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        if (inflater == null) return getView();
         View v = inflater.inflate(R.layout.fragment_settings,parent,false);
         setupUI(v);
         return v;
@@ -56,6 +58,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     private InputField setupInputField(View rootView,String fieldType,int resourceId,String defaultValue) {
         InputField result = InputField.inflate(rootView,fieldType,resourceId);
+        if (result == null) return null;
         result.setValue(defaultValue);
         result.setChangeListener(new InputValueChangeListener(result,this));
         return result;

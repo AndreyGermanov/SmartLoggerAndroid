@@ -1,7 +1,3 @@
-/**
- * Created by Andrey Germanov on 10/28/18.
- */
-
 package portal.it_port.ru.smartlogger.providers;
 
 import android.content.ContentProvider;
@@ -21,8 +17,6 @@ import portal.it_port.ru.smartlogger.utils.DataMap;
  */
 public class CronjobsContentProvider extends ContentProvider {
 
-    private final String TAG = this.getClass().getName();
-
     // URI which content resolvers uses to access this provider and run tasks related to
     // Cronjobs list
     public static final Uri CRONJOBS_LIST_URI = Uri.parse("content://.providers.CronjobsContentProvider/cronjobs");
@@ -33,11 +27,10 @@ public class CronjobsContentProvider extends ContentProvider {
 
     /**
      * Method automatically starts when this object instantiates first time
-     * @return
      */
     @Override
     public boolean onCreate() {
-        return false;
+        return true;
     }
 
     /**
@@ -71,7 +64,7 @@ public class CronjobsContentProvider extends ContentProvider {
         Object[] result = new Object[row.size()];
         int i = 0;
         for (String key: row.keySet()) {
-            if (key != "enabled")
+            if (!key.equals("enabled"))
                 result[i++] = DataMap.getOrDefault(row,key,"").toString();
             else
                 result[i++] = Boolean.parseBoolean(DataMap.getOrDefault(row,key,false).toString());

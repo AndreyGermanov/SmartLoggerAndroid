@@ -1,6 +1,7 @@
 package portal.it_port.ru.smartlogger.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,9 @@ import portal.it_port.ru.smartlogger.main.StateStore;
 public class DashboardFragment extends BaseFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup parent,Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_dashboard,parent,false);
-        SetupUI(v);
-        return v;
+    public View onCreateView(@Nullable LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        if (inflater == null) return getView();
+        return inflater.inflate(R.layout.fragment_dashboard,parent,false);
     }
 
     @Override
@@ -25,6 +25,4 @@ public class DashboardFragment extends BaseFragment {
         super.onResume();
         stateStore.setCurrentScreen(StateStore.Screens.DASHBOARD);
     }
-
-    private void SetupUI(View v) {};
 }

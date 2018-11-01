@@ -1,21 +1,14 @@
-/**
- * Created by Andrey Germanov on 10/28/18.
- */
 package portal.it_port.ru.smartlogger.models;
 
 import android.database.Cursor;
-import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-
 import portal.it_port.ru.smartlogger.utils.DataMap;
 
 /**
@@ -25,11 +18,11 @@ import portal.it_port.ru.smartlogger.utils.DataMap;
 public final class CronjobCollection extends Collection {
 
     // Instance of single object of this type
-    static CronjobCollection instance = null;
+    private static CronjobCollection instance = null;
 
     /**
      * Method returs single instance of this object
-     * @return
+     * @return Singleton instance of this object
      */
     public static CronjobCollection getInstance() {
         if (instance == null) instance = new CronjobCollection();
@@ -73,7 +66,7 @@ public final class CronjobCollection extends Collection {
         cronjob.setStatus(DataMap.getOrDefault(data,"status","IDLE").toString());
         cronjob.setType(data.get("type").toString());
         cronjob.setLastRunTimestamp(Long.parseLong(DataMap.getOrDefault(data,"lastRunTimestamp",0).toString()));
-        cronjobs.put(id,cronjob);
+        putCronjob(cronjob);
         return cronjob;
     }
 
@@ -141,11 +134,21 @@ public final class CronjobCollection extends Collection {
      */
     public List<Cronjob> getCronjobsList(String type) {
         List<Cronjob> result = new ArrayList<>();
-        for (String key: cronjobs.keySet()) {
-            if (type != null && !type.isEmpty() && !cronjobs.get(key).getType().equals(type)) continue;
-            result.add(cronjobs.get(key));
+        for (Cronjob it: cronjobs.values()) {
+            if (type != null && !type.isEmpty() && !it.getType().equals(type)) continue;
+            result.add(it);
         }
         Collections.sort(result);
+        return result;
+    }
+
+    /**
+     * Method returns set of types, which currently exists in the list
+     * @return Set of string names of cronjob types
+     */
+    public Set<String> getCronjobTypes() {
+        Set<String> result = new TreeSet<>();
+        for (Cronjob it: cronjobs.values()) result.add(it.getType());
         return result;
     }
 

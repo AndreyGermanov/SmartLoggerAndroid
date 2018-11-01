@@ -6,5 +6,5 @@ package portal.it_port.ru.smartlogger.models;
 /**
  * Base class for all collections of models
  */
-public abstract class Collection {
+abstract class Collection {
 }

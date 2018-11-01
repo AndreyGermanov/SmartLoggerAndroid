@@ -1,11 +1,9 @@
 package portal.it_port.ru.smartlogger.services;
 
 import android.os.AsyncTask;
-import com.google.gson.internal.LinkedTreeMap;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
-import java.util.TreeMap;
 
 import portal.it_port.ru.smartlogger.config.ConfigManager;
 

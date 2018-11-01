@@ -1,5 +1,6 @@
 package portal.it_port.ru.smartlogger.config;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import com.google.gson.Gson;
@@ -17,8 +18,6 @@ import portal.it_port.ru.smartlogger.utils.DataMap;
  */
 public class ConfigManager {
 
-    private final String TAG = "ConfigManager";
-
     private String host = "portal.it-port.ru";
     private int port = 8080;
     private String scheme = "http";
@@ -28,6 +27,7 @@ public class ConfigManager {
 
     private Gson gson = new Gson();
 
+    @SuppressLint("StaticFieldLeak")
     private static ConfigManager instance;
 
     public static ConfigManager getInstance() {
@@ -71,10 +71,6 @@ public class ConfigManager {
         return scheme;
     }
 
-    public void setScheme(String scheme) {
-        this.scheme = scheme;
-    }
-
     public int getPollPeriod() {
         return pollPeriod;
     }
@@ -85,15 +81,17 @@ public class ConfigManager {
 
     private void loadConfig() {
         try {
-            HashMap<String,Object> data = (HashMap<String,Object>)gson.fromJson(
-                    new BufferedReader(new InputStreamReader(context.openFileInput("config.json"))).readLine(),HashMap.class
+            HashMap data = gson.fromJson(
+                new BufferedReader(
+                    new InputStreamReader(context.openFileInput("config.json"))
+                ).readLine(),HashMap.class
             );
             host = DataMap.getOrDefault(data,"host",host).toString();
             port = Double.valueOf(DataMap.getOrDefault(data,"port",port).toString()).intValue();
             scheme = DataMap.getOrDefault(data,"scheme",scheme).toString();
             pollPeriod = Double.valueOf(DataMap.getOrDefault(data,"port",pollPeriod).toString()).intValue();
         } catch (FileNotFoundException e) {
-            Log.e(TAG,"Application config file not found");
+            Log.e("ConfigManager","Application config file not found");
         } catch (Exception e) {
             e.printStackTrace();
         }

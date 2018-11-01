@@ -13,7 +13,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import portal.it_port.ru.smartlogger.R;
 import portal.it_port.ru.smartlogger.fragments.AppTabBarFragment;
-import portal.it_port.ru.smartlogger.fragments.CronjobsListFragment;
+import portal.it_port.ru.smartlogger.fragments.CronjobsManagerFragment;
 import portal.it_port.ru.smartlogger.fragments.DashboardFragment;
 import portal.it_port.ru.smartlogger.fragments.SettingsFragment;
 import portal.it_port.ru.smartlogger.main.StateStore;
@@ -26,11 +26,10 @@ public class MainActivity extends FragmentActivity {
 
     ViewPager viewPager;
     private StateStore stateStore;
-    private final String TAG = "MainActivity";
 
     /**
      * Method starts after activity constructed
-     * @param state
+     * @param state State to persist
      */
     @Override
     protected void onCreate(Bundle state) {
@@ -74,6 +73,7 @@ public class MainActivity extends FragmentActivity {
     private class MainActivityBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent == null || intent.getAction()==null) return;
             if (intent.getAction().equals(AppTabBarFragment.CURRENT_TAB_CHANGED)) {
                 viewPager.setCurrentItem(stateStore.getCurrentTab());
             }
@@ -82,7 +82,7 @@ public class MainActivity extends FragmentActivity {
 
     private class PagerAdapter extends FragmentPagerAdapter {
 
-        public PagerAdapter(FragmentManager fm) {
+        PagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -90,7 +90,7 @@ public class MainActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: return new DashboardFragment();
-                case 1: return new CronjobsListFragment();
+                case 1: return new CronjobsManagerFragment();
                 case 2: return new SettingsFragment();
                 default: return null;
             }

@@ -1,5 +1,6 @@
 package portal.it_port.ru.smartlogger.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import com.google.gson.Gson;
@@ -27,7 +28,7 @@ public class StateStore {
     private String settingsPollPeriod = "";
     private String settingsProtocol = "";
 
-    private final String TAG = "StateStore";
+    @SuppressLint("StaticFieldLeak")
     private static StateStore instance;
 
     public static StateStore getInstance(Context context) {
@@ -64,7 +65,7 @@ public class StateStore {
         ConfigManager configManager = ConfigManager.getInstance(context);
         configManager.setContext(context);
         try {
-            HashMap<String,Object> state = (HashMap<String,Object>)gson.fromJson(
+            HashMap state = gson.fromJson(
                 new BufferedReader(new InputStreamReader(context.openFileInput("state.json"))).readLine(),HashMap.class
             );
             currentTab = Double.valueOf(DataMap.getOrDefault(state,"currentTab",currentTab).toString()).intValue();
@@ -76,7 +77,7 @@ public class StateStore {
             settingsPollPeriod = DataMap.getOrDefault(state,"settingsPollPeriod",configManager.getPollPeriod()).toString();
             settingsProtocol = DataMap.getOrDefault(state,"settingsProtocol",configManager.getScheme()).toString();
         } catch (FileNotFoundException e) {
-            Log.e(TAG,"Application state file not found");
+            Log.e("StateStore","Application state file not found");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,10 +99,6 @@ public class StateStore {
     public void setCronjobsListFilter(String cronjobsListFilter) {
         this.cronjobsListFilter = cronjobsListFilter;
         saveState();
-    }
-
-    public static void setInstance(StateStore instance) {
-        StateStore.instance = instance;
     }
 
     public int getCurrentTab() {

@@ -1,7 +1,3 @@
-/**
- * Created by Andrey Germanov on 10/28/18.
- */
-
 package portal.it_port.ru.smartlogger.models;
 
 import java.util.HashMap;
@@ -41,7 +37,7 @@ public class Cronjob extends Model {
         return status;
     }
 
-    public void setStatus(String status) {
+    void setStatus(String status) {
         this.status = status;
     }
 
@@ -73,7 +69,7 @@ public class Cronjob extends Model {
         return lastRunTimestamp;
     }
 
-    public void setLastRunTimestamp(long lastRunTimestamp) {
+    void setLastRunTimestamp(long lastRunTimestamp) {
         this.lastRunTimestamp = lastRunTimestamp;
     }
 

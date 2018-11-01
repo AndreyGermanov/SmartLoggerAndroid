@@ -6,9 +6,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import portal.it_port.ru.smartlogger.R;
 
 /**
@@ -33,8 +33,10 @@ public class SelectInputField extends InputField {
     public View setupValueField() {
         TypedArray attributes = getAttributes();
         items = Arrays.asList(attributes.getTextArray(R.styleable.SelectInputField_list));
+        System.out.println(items);
         spinner = new Spinner(getContext());
-        spinner.setAdapter(new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,items));
+        spinner.setAdapter(new ArrayAdapter(context,android.R.layout.simple_spinner_item,items));
+        attributes.recycle();
         return spinner;
     }
 
@@ -64,5 +66,9 @@ public class SelectInputField extends InputField {
     @Override
     public void setChangeListener(InputValueChangeListener listener) {
         spinner.setOnItemSelectedListener(listener);
+    }
+
+    public List getItems() {
+        return items;
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -23,9 +24,12 @@ public class AppTabBarFragment extends Fragment implements View.OnClickListener 
             "portal.it_port.ru.smartlogger.AppTabBarFragment.current_tab_changed";
 
     private StateStore stateStore;
+    private Context context;
 
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup parent,Bundle savedInstanceState) {
+    public View onCreateView(@Nullable LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        if (inflater == null) return getView();
+        context = getContext();
         stateStore = StateStore.getInstance(getContext());
         View v = inflater.inflate(R.layout.fragment_tabbar,parent,false);
         setupUI(v);
@@ -49,7 +53,7 @@ public class AppTabBarFragment extends Fragment implements View.OnClickListener 
 
     private void setBroadcastReceiver() {
         IntentFilter filter = new IntentFilter(CURRENT_TAB_CHANGED);
-        LocalBroadcastManager.getInstance(getContext())
+        LocalBroadcastManager.getInstance(context)
                 .registerReceiver(new TabBarBroadcastReceiver(),filter);
     }
 
@@ -63,7 +67,7 @@ public class AppTabBarFragment extends Fragment implements View.OnClickListener 
         }
         if (selectedTab != null) {
             stateStore.setCurrentTab(selectedTab);
-            LocalBroadcastManager.getInstance(getContext())
+            LocalBroadcastManager.getInstance(context)
                     .sendBroadcast(new Intent(CURRENT_TAB_CHANGED));
         }
     }
@@ -71,6 +75,7 @@ public class AppTabBarFragment extends Fragment implements View.OnClickListener 
     private class TabBarBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent == null || intent.getAction() == null) return;
             if (intent.getAction().equals(AppTabBarFragment.CURRENT_TAB_CHANGED)) {
                 if (getView() != null) setupUI(getView());
             }

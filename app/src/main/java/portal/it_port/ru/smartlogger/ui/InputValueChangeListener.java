@@ -4,6 +4,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 
+import java.util.List;
+
 import portal.it_port.ru.smartlogger.fragments.SettingsFragment;
 
 /**
@@ -30,7 +32,9 @@ public class InputValueChangeListener implements TextWatcher, AdapterView.OnItem
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (!(source instanceof SelectInputField)) return;
         SelectInputField field = (SelectInputField)source;
-        Object value = field.items.get(position);
+        List items = field.getItems();
+        if (items.size() == 0) return;
+        Object value = items.get(position);
         host.onEditTextChanged(source,value);
     }
 

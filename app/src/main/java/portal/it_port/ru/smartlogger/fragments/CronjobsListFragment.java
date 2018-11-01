@@ -29,13 +29,11 @@ import portal.it_port.ru.smartlogger.services.CronjobsService;
  */
 public class CronjobsListFragment extends ListFragment {
 
-    private final String TAG = this.getClass().getName();
-
     // Filter used for list. Only cronjobs with this type displayed in the list
-    private String cronjobType;
     private StateStore stateStore;
     // List of cronjobs displayed
     List<Cronjob> list;
+    private Context context;
 
     /**
      * Method starts automatically after fragment constructed
@@ -44,10 +42,9 @@ public class CronjobsListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+        context = getContext();
         stateStore = StateStore.getInstance(getContext());
-        cronjobType = StateStore.getInstance(getActivity().getApplicationContext())
-                .getCronjobsListFilter();
-        list = CronjobCollection.getInstance().getCronjobsList(cronjobType);
+        list = CronjobCollection.getInstance().getCronjobsList(stateStore.getCronjobsListFilter());
         if (stateStore.getCurrentScreen() == StateStore.Screens.CRONJOBS_ITEM)
             startActivity(new Intent(getContext(),CronjobItemActivity.class));
     }
@@ -64,13 +61,14 @@ public class CronjobsListFragment extends ListFragment {
      * @param state Saved fragment state
      */
     @Override
-    public void onViewCreated(View view,Bundle state) {
+    public void onViewCreated(@Nullable  View view,Bundle state) {
+        if (view == null) return;
         super.onViewCreated(view,state);
-        CronjobsListAdapter adapter = new CronjobsListAdapter(getActivity(),
+        CronjobsListAdapter adapter = new CronjobsListAdapter(context,
                 android.R.layout.simple_list_item_1,list);
         setListAdapter(adapter);
         LocalBroadcastManager
-                .getInstance(getContext())
+                .getInstance(context)
                 .registerReceiver(new CronjobsListBroadcastReceiver(),
                         new IntentFilter(CronjobsService.CRONJOBS_LIST_CHANGED));
         ListView list = getListView();
@@ -81,7 +79,7 @@ public class CronjobsListFragment extends ListFragment {
     public void onListItemClick(ListView listView, View parent, int position, long id) {
         super.onListItemClick(listView, parent, position, id);
         Cronjob cronjob = (Cronjob)getListAdapter().getItem(position);
-        StateStore.getInstance(getActivity().getApplicationContext())
+        StateStore.getInstance(context)
                 .setCurrentCronjobId(cronjob.getId());
         Intent i = new Intent(getActivity(), CronjobItemActivity.class);
         startActivity(i);
@@ -93,7 +91,7 @@ public class CronjobsListFragment extends ListFragment {
         public void onReceive(Context context, Intent intent) {
             updateCronjobs(context);
             list.clear();
-            list.addAll(CronjobCollection.getInstance().getCronjobsList(cronjobType));
+            list.addAll(CronjobCollection.getInstance().getCronjobsList(stateStore.getCronjobsListFilter()));
             ((ArrayAdapter)getListAdapter()).notifyDataSetChanged();
         }
 
@@ -126,10 +124,9 @@ public class CronjobsListFragment extends ListFragment {
             return convertView;
         }
 
-        private TextView setupTextView(View v,int resourceId,String value) {
+        private void setupTextView(View v,int resourceId,String value) {
             TextView result = v.findViewById(resourceId);
             result.setText(value);
-            return result;
         }
     }
 }

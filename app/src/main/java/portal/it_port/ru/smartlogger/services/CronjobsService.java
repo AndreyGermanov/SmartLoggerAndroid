@@ -1,6 +1,3 @@
-/**
- * Created by Andrey Germanov on 10/28/18.
- */
 package portal.it_port.ru.smartlogger.services;
 
 import android.app.IntentService;
@@ -43,10 +40,11 @@ public class CronjobsService extends IntentService {
         super.onCreate();
     }
 
-    @Override
+
     /**
      * Method automatically starts when service receives intent to handle it
      */
+    @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         if (intent == null || intent.getAction() == null) return;
         switch (intent.getAction()) {

@@ -15,6 +15,7 @@
     <string name="incorrectFieldValueError">Incorrect field value</string>
     <string name="configSavedSuccessfully">Configuration saved successfully</string>
     <string name="configSaveFailure">Failed to save config</string>
+    <string name="type">Type</string>
     <string-array name="host_protocols">
         <item>http</item>
         <item>https</item>

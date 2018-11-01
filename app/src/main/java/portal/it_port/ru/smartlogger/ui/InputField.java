@@ -16,6 +16,8 @@ public abstract class InputField extends LinearLayout {
     protected TextView labelField,errorField;
     protected Object value;
     protected AttributeSet attrs;
+    protected Context context;
+
 
     public static InputField inflate(View v,String fieldType,int resourceId) {
         switch (fieldType) {
@@ -27,6 +29,7 @@ public abstract class InputField extends LinearLayout {
 
     public InputField(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         this.attrs = attrs;
         setupView();
     }
@@ -64,8 +67,6 @@ public abstract class InputField extends LinearLayout {
     public String getLabel() { return labelField.getText().toString();}
 
     public void setLabel(String text) { labelField.setText(text);}
-
-    public String getError() { return errorField.getText().toString();}
 
     public void setError(String text) {
         errorField.setError(text);

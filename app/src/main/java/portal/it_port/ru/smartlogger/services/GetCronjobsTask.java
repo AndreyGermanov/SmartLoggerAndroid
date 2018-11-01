@@ -1,6 +1,3 @@
-/**
- * Created by Andrey Germanov on 10/29/18.
- */
 package portal.it_port.ru.smartlogger.services;
 
 import android.content.ContentValues;
@@ -40,10 +37,10 @@ class GetCronjobsTask extends TimerTask {
         this.context = context;
     }
 
-    @Override
     /**
      * Main method, which service uses to start this task
      */
+    @Override
     public void run() {
         try {
             TreeMap<String,LinkedTreeMap<String,Object>> received = getCurrentCronjobs();
