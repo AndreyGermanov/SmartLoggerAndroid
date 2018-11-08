@@ -54,6 +54,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         fields.put("port",setupInputField(v,"text",R.id.settings_port,stateStore.getSettingsPort()));
         fields.put("pollPeriod",setupInputField(v,"text",R.id.settings_pollperiod,stateStore
                 .getSettingsPollPeriod()));
+        fields.put("login",setupInputField(v,"text",R.id.settings_login,stateStore.getSettingsLogin()));
+        fields.put("password",setupInputField(v,"text",R.id.settings_password,stateStore.getSettingsPassword()));
     }
 
     private InputField setupInputField(View rootView,String fieldType,int resourceId,String defaultValue) {
@@ -77,7 +79,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             case R.id.settings_host: stateStore.setSettingsHost(value.toString());break;
             case R.id.settings_port: stateStore.setSettingsPort(value.toString());break;
             case R.id.settings_pollperiod: stateStore.setSettingsPollPeriod(value.toString());break;
-            case R.id.settings_protocol: stateStore.setSettingsProtocol(value.toString());
+            case R.id.settings_protocol: stateStore.setSettingsProtocol(value.toString());break;
+            case R.id.settings_login: stateStore.setSettingsLogin(value.toString());break;
+            case R.id.settings_password: stateStore.setSettingsPassword(value.toString());
         }
     }
 

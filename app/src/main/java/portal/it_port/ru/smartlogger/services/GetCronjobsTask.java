@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.TimerTask;
 import java.util.TreeMap;
 import portal.it_port.ru.smartlogger.config.ConfigManager;
@@ -69,7 +70,9 @@ class GetCronjobsTask extends TimerTask {
     private TreeMap<String,LinkedTreeMap<String,Object>> getCurrentCronjobs() {
         try {
             URL url = new URL(config.getScheme() + "://" + config.getHost() + ":" + config.getPort() + "/cronjobs");
+            String encoded = Base64.getEncoder().encodeToString((config.getLogin()+":"+config.getPassword()).getBytes());  //Java 8
             URLConnection connection = url.openConnection();
+            connection.setRequestProperty("Authorization","Basic "+encoded);
             connection.connect();
             Gson gson = new Gson();
             String json = new BufferedReader(new InputStreamReader((InputStream) connection.getContent())).readLine();

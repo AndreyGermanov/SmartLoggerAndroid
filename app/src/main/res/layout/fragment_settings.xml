@@ -33,6 +33,20 @@
                 android:layout_height="wrap_content"
             />
             <portal.it_port.ru.smartlogger.ui.TextInputField
+                android:id="@+id/settings_login"
+                custom:label="@string/login"
+                custom:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            />
+            <portal.it_port.ru.smartlogger.ui.TextInputField
+                android:id="@+id/settings_password"
+                custom:label="@string/password"
+                custom:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+            <portal.it_port.ru.smartlogger.ui.TextInputField
                 android:id="@+id/settings_pollperiod"
                 custom:label="Poll period"
                 custom:inputType="number"

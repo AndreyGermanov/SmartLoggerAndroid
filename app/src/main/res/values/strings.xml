@@ -16,6 +16,8 @@
     <string name="configSavedSuccessfully">Configuration saved successfully</string>
     <string name="configSaveFailure">Failed to save config</string>
     <string name="type">Type</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
     <string-array name="host_protocols">
         <item>http</item>
         <item>https</item>

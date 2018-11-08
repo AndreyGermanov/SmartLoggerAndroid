@@ -22,6 +22,8 @@ public class ConfigManager {
     private int port = 8080;
     private String scheme = "http";
     private int pollPeriod = 5000;
+    private String login = "";
+    private String password = "";
     private StateStore stateStore;
     private Context context;
 
@@ -90,6 +92,8 @@ public class ConfigManager {
             port = Double.valueOf(DataMap.getOrDefault(data,"port",port).toString()).intValue();
             scheme = DataMap.getOrDefault(data,"scheme",scheme).toString();
             pollPeriod = Double.valueOf(DataMap.getOrDefault(data,"port",pollPeriod).toString()).intValue();
+            login = DataMap.getOrDefault(data,"login",login).toString();
+            password = DataMap.getOrDefault(data,"password",password).toString();
         } catch (FileNotFoundException e) {
             Log.e("ConfigManager","Application config file not found");
         } catch (Exception e) {
@@ -99,7 +103,7 @@ public class ConfigManager {
 
     public boolean saveConfig() {
         HashMap<String,Object> data = DataMap.create(
-                "host", host, "port", port,"scheme",scheme,"pollPeriod",pollPeriod
+                "host", host, "port", port,"scheme",scheme,"pollPeriod",pollPeriod,"login",login,"password",password
         );
         try {
             FileOutputStream os = context.openFileOutput("config.json", Context.MODE_PRIVATE);
@@ -119,6 +123,8 @@ public class ConfigManager {
             port = Integer.parseInt(stateStore.getSettingsPort());
             scheme = stateStore.getSettingsProtocol();
             pollPeriod = Integer.parseInt(stateStore.getSettingsPollPeriod());
+            login = stateStore.getSettingsLogin();
+            password = stateStore.getSettingsPassword();
         }
     }
 
@@ -133,6 +139,10 @@ public class ConfigManager {
         if (!error.isEmpty()) result.put("protocol",error);
         error = validatePollPeriod();
         if (!error.isEmpty()) result.put("pollPeriod",error);
+        error = validateLogin();
+        if (!error.isEmpty()) result.put("login",error);
+        error = validatePassword();
+        if (!error.isEmpty()) result.put("password",error);
         return result;
     }
 
@@ -170,5 +180,29 @@ public class ConfigManager {
         }
     }
 
+    private String validateLogin() {
+        return stateStore.getSettingsLogin().isEmpty() ? context.getResources().getString(R.string.requiredFieldError) : "";
+    }
+
+    private String validatePassword() {
+        return stateStore.getSettingsPassword().isEmpty() ? context.getResources().getString(R.string.requiredFieldError) : "";
+    }
+
     public void setContext(Context context) { this.context = context; }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

@@ -27,6 +27,8 @@ public class StateStore {
     private String settingsPort = "";
     private String settingsPollPeriod = "";
     private String settingsProtocol = "";
+    private String settingsLogin = "";
+    private String settingsPassword = "";
 
     @SuppressLint("StaticFieldLeak")
     private static StateStore instance;
@@ -50,7 +52,9 @@ public class StateStore {
             "settingsHost", getSettingsHost(),
             "settingsPort", getSettingsPort(),
             "settingsPollPeriod", getSettingsPollPeriod(),
-            "settingsProtocol", getSettingsProtocol()
+            "settingsProtocol", getSettingsProtocol(),
+            "settingsLogin", getSettingsLogin(),
+            "settingsPassword", getSettingsPassword()
         );
         try {
             FileOutputStream os = context.openFileOutput("state.json", Context.MODE_PRIVATE);
@@ -76,6 +80,8 @@ public class StateStore {
             settingsPort = DataMap.getOrDefault(state,"settingsPort",configManager.getPort()).toString();
             settingsPollPeriod = DataMap.getOrDefault(state,"settingsPollPeriod",configManager.getPollPeriod()).toString();
             settingsProtocol = DataMap.getOrDefault(state,"settingsProtocol",configManager.getScheme()).toString();
+            settingsLogin = DataMap.getOrDefault(state,"settingsLogin",configManager.getLogin()).toString();
+            settingsPassword = DataMap.getOrDefault(state,"settingsPassword",configManager.getPassword()).toString();
         } catch (FileNotFoundException e) {
             Log.e("StateStore","Application state file not found");
         } catch (Exception e) {
@@ -153,6 +159,22 @@ public class StateStore {
     public void setSettingsProtocol(String settingsProtocol) {
         this.settingsProtocol = settingsProtocol;
         saveState();
+    }
+
+    public String getSettingsLogin() {
+        return settingsLogin;
+    }
+
+    public void setSettingsLogin(String settingsLogin) {
+        this.settingsLogin = settingsLogin;
+    }
+
+    public String getSettingsPassword() {
+        return settingsPassword;
+    }
+
+    public void setSettingsPassword(String settingsPassword) {
+        this.settingsPassword = settingsPassword;
     }
 
     public enum Screens {
